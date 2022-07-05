@@ -21,22 +21,25 @@ const RangeComponent = ({ control }) => {
 	};
 	const { label } = control.params;
 	const { defaultVal, min, max, step } = controlProps;
-
+	const noticeText = control.paramsT ? control.params.notice_text : '';
 	const updateValues = (newVal) => {
 		setValue(newVal);
 		control.setting.set(newVal);
 	};
 
 	return (
-		<Range
-			value={value}
-			label={label}
-			defaultVal={defaultVal}
-			onChange={updateValues}
-			step={step}
-			min={min}
-			max={max}
-		/>
+		<div>
+			<Range
+				value={value}
+				label={label}
+				defaultVal={defaultVal}
+				onChange={updateValues}
+				step={step}
+				min={min}
+				max={max}
+			/>
+			{noticeText && <p>{noticeText}</p>}
+		</div>
 	);
 };
 

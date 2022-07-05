@@ -262,19 +262,22 @@ class Layout_Sidebar extends Base_Customizer {
 			$priority += 30;
 
 			$width_default = $this->sidebar_layout_width_default( $width_id );
+			$sidebar       = get_theme_mod( 'neve_single_post_sidebar_layout', 'full-width' );
+			$content_width = get_theme_mod( 'neve_single_post_content_width', 70 );
 
 			$this->add_control(
 				new Control(
 					$width_id,
 					array(
 						'sanitize_callback' => 'absint',
-						'transport'         => $this->selective_refresh,
+						'transport'         => 'refresh',
 						'default'           => $width_default,
 					),
 					array(
 						'label'           => esc_html__( 'Content Width (%)', 'neve' ),
 						'section'         => 'neve_sidebar',
 						'type'            => 'neve_range_control',
+						'notice_text'     => ( $id === 'single_post' && $sidebar !== 'full-width' && $content_width > 80 ) ? 'Notice text' : '',
 						'input_attrs'     => [
 							'min'        => 50,
 							'max'        => 100,

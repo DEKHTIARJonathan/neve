@@ -25,6 +25,12 @@ class Range extends \WP_Customize_Control {
 	 * @var array
 	 */
 	public $input_attrs = [];
+	/**
+	 * Notice Text passed to JS
+	 *
+	 * @var array
+	 */
+	public $notice_text = '';
 
 	/**
 	 * Send to JS.
@@ -32,6 +38,7 @@ class Range extends \WP_Customize_Control {
 	public function json() {
 		$json                = parent::json();
 		$json['input_attrs'] = $this->input_attrs;
+		$json['notice_text'] = $this->notice_text;
 		return $json;
 	}
 
