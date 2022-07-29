@@ -96,6 +96,12 @@ class CartIcon extends Abstract_Component {
 	public function load_scripts() {
 		if ( $this->is_component_active() ) {
 			wp_add_inline_script( 'neve-script', $this->toggle_cart_is_empty() );
+
+			$mini_cart_style       = get_theme_mod( CartIcon::COMPONENT_ID . '_' . CartIcon::MINI_CART_STYLE, 'dropdown' );
+			$should_load_offcanvas = apply_filters( 'neve_load_offcanvas_script', false );
+			if ( $should_load_offcanvas && $mini_cart_style === 'off-canvas' ) {
+				wp_add_inline_script( 'neve-script', $this->load_offcanvas() );
+			}
 		}
 	}
 
@@ -115,6 +121,43 @@ class CartIcon extends Abstract_Component {
 				});
 			})(jQuery);
 		';
+	}
+
+	/**
+	 * Load off-canvas js script.
+	 *
+	 * @return string
+	 */
+	public function load_offcanvas() {
+		return '
+		window.addEventListener( \'load\', function () {
+			const cartIcons = document.querySelectorAll(
+				\'.responsive-nav-cart.off-canvas\'
+			);
+
+			cartIcons.forEach( function ( cart ) {
+				const openButton = cart.querySelector( \'.cart-icon-wrapper\' );
+				const cartWrap = cart.querySelector( \'.cart-off-canvas\' );
+				const closeBtn = cart.querySelector( \'.nv-close-cart-sidebar\' );
+
+				if ( openButton === null || cartWrap === null || closeBtn === null ) {
+					return false;
+				}
+
+				openButton.addEventListener( \'click\', function ( e ) {
+					e.preventDefault();
+					if ( cart.classList.contains( \'cart-is-empty\' ) ) {
+						return false;
+					}
+					cartWrap.classList.add( \'cart-open\' );
+				} );
+
+				closeBtn.addEventListener( \'click\', function ( e ) {
+					e.preventDefault();
+					cartWrap.classList.remove( \'cart-open\' );
+				} );
+			} );
+		})';
 	}
 
 	/**
